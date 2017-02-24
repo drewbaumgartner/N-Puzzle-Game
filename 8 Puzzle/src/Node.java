@@ -11,8 +11,7 @@ public class Node {
 	private float xSize = 0;
 	private float ySize = 0;
 	private boolean isHovering;
-	
-	
+		
 	public Node(PApplet p, int n, int boardSize)
 	{
 		parent = p;

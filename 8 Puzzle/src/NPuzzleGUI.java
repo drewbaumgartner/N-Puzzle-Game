@@ -71,6 +71,11 @@ public class NPuzzleGUI extends PApplet {
 		return false;
 	}
 	
+	public void shuffleGrid()
+	{
+		
+	}
+	
 	// Construct the data grid of Nodes.  Assigns a value to each node in "ascending" order
 	// The bottom rightmost node is the "dummy" node (the empty space on the game board)
 	// Example: N_SIZE = 3, then grid = 3x3.  
