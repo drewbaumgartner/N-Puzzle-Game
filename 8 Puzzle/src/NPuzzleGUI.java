@@ -1,3 +1,5 @@
+import java.util.Random;
+
 import processing.core.PApplet;
 
 public class NPuzzleGUI extends PApplet {
@@ -14,6 +16,7 @@ public class NPuzzleGUI extends PApplet {
 	{
 		size(N_SIZE * 100, N_SIZE * 100);
 		buildGrid();
+		shuffleGrid();
 		noLoop();
 	}
 	
@@ -28,12 +31,16 @@ public class NPuzzleGUI extends PApplet {
 		}
 	}
 	
+	// This function is called automatically by the processing library every time the mouse is moved
 	public void mouseMoved()
 	{
+		// Loops through each node "n" in the 2D array "grid[][]" and checks if the mouse is hovering over the node
 		for(Node[] row : grid) for(Node n : row) n.isHovering();
+		// Call redraw to redraw the screen because in our "Node" class there is code to change the border color if the mouse is hovering over the node
 		redraw();
 	}
 	
+	// This function is called automatically by the processing library whenever a mouse button is clicked and released
 	public void mouseClicked()
 	{
 		int temp = 0;
@@ -42,10 +49,11 @@ public class NPuzzleGUI extends PApplet {
 		{
 			for(int column = 0; column < grid[row].length; column++)
 			{
+				// If the mouse is hovering over the node at indexes grid[row][column] and the mouse button that was clicked was the left mouse button
+				// and if the clicked node has the blank neighbor, then swap positions with the clicked node and the blank node
 				if(grid[row][column].isHovering() && mouseButton == LEFT && isNeighborBlank(row, column))
 				{
-					// Swap clicked with blank coordinates
-					temp = grid[row][column].getNumber();
+					temp = grid[row][column].getNumber(); // stores numeric value of the clicked node
 					grid[row][column].setNumber(N_SIZE * N_SIZE);
 					grid[blankCoords[0]][blankCoords[1]].setNumber(temp);
 					blankCoords[0] = row;
@@ -56,24 +64,56 @@ public class NPuzzleGUI extends PApplet {
 		}
 	}
 	
-	// Check the neighboring nodes for the empty node.  Checks left, right, up, and down.  If the empty node is a neighbor then return true.
+	// Check the neighboring nodes for the empty node.  Checks left, right, down, and up.  If the empty node is a neighbor then return true.
 	public boolean isNeighborBlank(int rowIndex, int columnIndex)
 	{
 		// Check Left
 		if(columnIndex - 1 < grid[rowIndex].length && columnIndex - 1 >= 0 && grid[rowIndex][columnIndex - 1].getNumber() == N_SIZE * N_SIZE) return true;
 		// Check Right
 		if(columnIndex + 1 < grid[rowIndex].length && grid[rowIndex][columnIndex + 1].getNumber() == N_SIZE * N_SIZE) return true;
-		// Check Up
-		if(rowIndex + 1 < grid.length && grid[rowIndex + 1][columnIndex].getNumber() == N_SIZE * N_SIZE) return true;
 		// Check Down
+		if(rowIndex + 1 < grid.length && grid[rowIndex + 1][columnIndex].getNumber() == N_SIZE * N_SIZE) return true;
+		// Check Up
 		if(rowIndex - 1 < grid.length && rowIndex - 1 >= 0 && grid[rowIndex - 1][columnIndex].getNumber() == N_SIZE * N_SIZE) return true;
 
 		return false;
 	}
 	
+	// Shuffles the grid and once it is shuffled the program then calls "setBlankCoordinates" to find the blank tile's indexes (coordinates)
 	public void shuffleGrid()
 	{
+		Random random = new Random();
 		
+		for(int row = grid.length - 1; row > 0; row--)
+		{
+			for(int column = grid[row].length - 1; column > 0; column--)
+			{
+				int r = random.nextInt(row + 1);
+				int c = random.nextInt(column + 1);
+				
+				Node temp = grid[row][column];
+				grid[row][column] = grid[r][c];
+				grid[r][c] = temp;
+			}
+		}
+		
+		setBlankCoordinates();
+	}
+	
+	// Finds the indexes where the blank tile is located and stores them in the array called blankCoords
+	public void setBlankCoordinates()
+	{
+		for(int row = 0; row < grid.length; row++)
+		{
+			for(int column = 0; column < grid[row].length; column++)
+			{
+				if(grid[row][column].getNumber() == N_SIZE * N_SIZE)
+				{
+					blankCoords[0] = row;
+					blankCoords[1] = column;
+				}
+			}
+		}
 	}
 	
 	// Construct the data grid of Nodes.  Assigns a value to each node in "ascending" order
@@ -92,10 +132,22 @@ public class NPuzzleGUI extends PApplet {
 		{
 			for(int column = 0; column < grid[row].length; column++)
 			{
-					grid[row][column] = new Node(this, number, N_SIZE);	
-					number++;
+				grid[row][column] = new Node(this, number, N_SIZE);	
+				number++;
 			}
 		}
 	}
 	
+	// Used for debugging purposes
+	public void printGrid()
+	{
+		for(int row = 0; row < grid.length; row++)
+		{
+			for(int column = 0; column < grid[row].length; column++)
+			{
+				System.out.print("[ " + grid[row][column].getNumber() + " ]");
+			}
+			System.out.println();
+		}
+	}
 }

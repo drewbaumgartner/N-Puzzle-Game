@@ -47,7 +47,14 @@ public class Node {
 			this.setForegroundColor(number);
 			parent.fill(foregroundColor);
 			parent.rectMode(PConstants.CENTER);
-			parent.rect(xPos, yPos, parent.width * 9/32, parent.height * 9/32, 5);
+			if(boardSize == 3)
+			{
+				parent.rect(xPos, yPos, parent.width * 9/32, parent.height * 9/32, 5);
+			}
+			else if(boardSize == 4)
+			{
+				parent.rect(xPos, yPos, parent.width * 7/32, parent.height * 7/32, 5);
+			}
 		}
 		
 		// Display the number on the node
