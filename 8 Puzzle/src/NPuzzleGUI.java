@@ -6,7 +6,9 @@ public class NPuzzleGUI extends PApplet {
 
 	private final int N_SIZE = 3;
 	private Node grid[][];	
+	private int[] shuffled;
 	private int[] blankCoords = {N_SIZE - 1, N_SIZE - 1};
+	private boolean solvable = false;
 	
 	public static void main(String[] args) {
 		PApplet.main("NPuzzleGUI");
@@ -84,20 +86,81 @@ public class NPuzzleGUI extends PApplet {
 	{
 		Random random = new Random();
 		
-		for(int row = grid.length - 1; row > 0; row--)
+		while(!(solvable))
 		{
-			for(int column = grid[row].length - 1; column > 0; column--)
+			for(int row = grid.length - 1; row > 0; row--)
 			{
-				int r = random.nextInt(row + 1);
-				int c = random.nextInt(column + 1);
-				
-				Node temp = grid[row][column];
-				grid[row][column] = grid[r][c];
-				grid[r][c] = temp;
+				for(int column = grid[row].length - 1; column > 0; column--)
+				{
+					int r = random.nextInt(row + 1);
+					int c = random.nextInt(column + 1);
+					
+					Node temp = grid[row][column];
+					grid[row][column] = grid[r][c];
+					grid[r][c] = temp;
+				}
+			}
+			
+			isSolvable();
+		}
+
+		
+		setBlankCoordinates();
+	}
+	
+	
+	public void isSolvable()
+	{
+		int numInversions = findNumberOfInversions();		
+		
+		// If the number of inversions is odd, then the puzzle cannot be solved
+		if(numInversions % 2 == 1)
+		{
+			solvable = false;
+		}
+		// If the number of inversions is even, then the puzzle can be solved
+		else
+		{
+			solvable = true;
+		}
+	}
+	
+	// Calculates the number of inversions in the shuffled array.  Helper function for the isSolvable method
+	public int findNumberOfInversions()
+	{
+		fill1DArray();
+		int temp = 0;
+		
+		// Loop through the shuffled array and compare each element[i] with its next elements[i+1], [i+2], [i+3], ...
+		for(int i = 0; i < shuffled.length; i++)
+		{
+			for(int j = i + 1; j < shuffled.length; j++)
+			{
+				if(shuffled[i] > shuffled[j])
+				{
+					temp++;
+				}
 			}
 		}
 		
-		setBlankCoordinates();
+		return temp;
+	}
+	
+	// Fills the 1D array named "shuffled" with the numeric values from the grid[][] array starting from top left and ending at bottom right
+	public void fill1DArray()
+	{
+		shuffled = new int[N_SIZE * N_SIZE];
+		
+		int i = 0;
+		
+		for(int row = 0; row < grid.length; row++)
+		{
+			for(int column = 0; column < grid[row].length; column++)
+			{
+				shuffled[i] = grid[row][column].getNumber();
+				i++;
+			}
+		}
 	}
 	
 	// Finds the indexes where the blank tile is located and stores them in the array called blankCoords
@@ -138,7 +201,7 @@ public class NPuzzleGUI extends PApplet {
 		}
 	}
 	
-	// Used for debugging purposes
+	// Used for debugging purposes only
 	public void printGrid()
 	{
 		for(int row = 0; row < grid.length; row++)
