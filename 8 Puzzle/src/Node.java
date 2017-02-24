@@ -11,8 +11,7 @@ public class Node {
 	private float xSize = 0;
 	private float ySize = 0;
 	private boolean isHovering;
-	
-	
+		
 	public Node(PApplet p, int n, int boardSize)
 	{
 		parent = p;
@@ -36,26 +35,36 @@ public class Node {
 		parent.rectMode(PConstants.RADIUS);
 		parent.rect(xPos, yPos, xSize, ySize); 
 		
-
+		// if the mouse is hovering the node then make the inner border color white
 		if(isHovering)
 		{
 			parent.stroke(255);
 		}
 		
+		// if the number is not the last number in the puzzle then the foreground gets displayed (inner square and number)
 		if(number != boardSize * boardSize)
 		{
 			this.setForegroundColor(number);
 			parent.fill(foregroundColor);
 			parent.rectMode(PConstants.CENTER);
-			parent.rect(xPos, yPos, parent.width * 9/32, parent.height * 9/32, 5);
+			if(boardSize == 3)
+			{
+				parent.rect(xPos, yPos, parent.width * 9/32, parent.height * 9/32, 5);
+			}
+			else if(boardSize == 4)
+			{
+				parent.rect(xPos, yPos, parent.width * 7/32, parent.height * 7/32, 5);
+			}
 		}
 		
+		// Display the number on the node
 		parent.fill(0);
 		parent.textSize(40);
 		parent.textAlign(PConstants.CENTER, PConstants.CENTER);
-		parent.text(number, xPos, yPos - 5);
+		parent.text(number, xPos, yPos - 5); // the -5 is just a manual offset because the center alignment looks off to me
 	}
 	
+	// Returns true if the mouse is hovering over the node.  This code checks the "outer" / background square
 	public boolean isHovering()
 	{
 		return isHovering = parent.mouseX > xPos - xSize && parent.mouseX < xPos + xSize && parent.mouseY > yPos -ySize && parent.mouseY < yPos + ySize;
