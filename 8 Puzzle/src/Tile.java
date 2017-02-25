@@ -1,6 +1,6 @@
 import processing.core.*;
 
-public class Node {
+public class Tile {
 	private PApplet parent;
 	private int number = 0;
 	private int boardSize = 0;
@@ -12,7 +12,7 @@ public class Node {
 	private float ySize = 0;
 	private boolean isHovering;
 		
-	public Node(PApplet p, int n, int boardSize)
+	public Tile(PApplet p, int n, int boardSize)
 	{
 		parent = p;
 		number = n;
