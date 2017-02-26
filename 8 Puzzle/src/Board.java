@@ -7,13 +7,13 @@ public class Board implements Comparable<Board>{
 	private Tile[][] board;
 	private int[] parityCheckArray;
 	private int boardSize;
-	private int numMovesToSolve = 0;
+	private int numMovesToSolve = 0; 
 	private int blankRow = 0; // Stores the row index of the blank tile
 	private int blankColumn = 0; // Stores the column index of the blank tile
 	private int blankValue = 0;
 	private boolean solvable = false;
-	
-	
+	private Board prevBoard = null;
+		
 	public Board(PApplet p, int size)
 	{
 		parent = p;
@@ -24,6 +24,7 @@ public class Board implements Comparable<Board>{
 		buildBoard();
 	}
 	
+	// Call the display() method for each tile in the board
 	public void display()
 	{
 		for(int row = 0; row < board.length; row++)
@@ -68,7 +69,7 @@ public class Board implements Comparable<Board>{
 		}
 	}
 	
-	// When the Left mouse button is clicked, if it is hovering over a tile that is touching the blank tile, then those tiles swap places
+	// When the Left mouse button is clicked, if it is hovering over a tile that is neighboring the blank tile, then swap the clicked tile with the blank tile
 	public void mouseClicked()
 	{
 		int temp = 0;
@@ -213,6 +214,43 @@ public class Board implements Comparable<Board>{
 	public void setNumberOfMoves(int n)
 	{
 		numMovesToSolve = n;
+	}
+	
+	public Board getPreviousBoard()
+	{
+		return prevBoard;
+	}
+	
+	public void setPreviousBoard(Board b)
+	{
+		prevBoard = b;
+	}
+	
+	public int getBlankRowIndex()
+	{
+		return blankRow;
+	}
+	
+	public int getBlankColumnIndex()
+	{
+		return blankColumn;
+	}
+	
+	public int getBoardSize()
+	{
+		return boardSize;
+	}
+	
+	public Tile getTileAt(int row, int column)
+	{
+		return board[row][column];
+	}
+		
+	public BoardData getBoardData()
+	{
+		BoardData temp = new BoardData(this, blankRow, blankColumn);
+		
+		return temp;
 	}
 	
 }
