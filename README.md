@@ -11,4 +11,13 @@ Shuffle Button - The plan for this button is to provide the user a way to shuffl
 
 Things that are not working correctly (2/27/2017):
 
-The program currently cannot solve a 4x4.  I am in the process of fixing this!
+The program currently cannot solve a 4x4 (parity checking is most likely the issue).  I am in the process of fixing this!
+
+
+Resources used:
+
+https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html - Useful website for determining the parity and solvability of a specific N puzzle.  
+
+https://processing.org/reference/ - Reference for the processing library
+
+
