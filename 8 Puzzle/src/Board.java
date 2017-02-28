@@ -2,7 +2,7 @@ import java.util.Random;
 
 import processing.core.*;
 
-public class Board implements Comparable<Board>{
+public class Board{
 	private PApplet parent;
 	private Tile[][] board;
 	private int[] parityCheckArray;
@@ -52,23 +52,7 @@ public class Board implements Comparable<Board>{
 			}
 		}
 	}
-	
-	public int compareTo(Board other)
-	{
-		if(numMovesToSolve == other.getNumberOfMoves())
-		{
-			return 0;
-		}
-		else if(numMovesToSolve > other.getNumberOfMoves())
-		{
-			return 1;
-		}
-		else
-		{
-			return -1;
-		}
-	}
-	
+		
 	// When the Left mouse button is clicked, if it is hovering over a tile that is neighboring the blank tile, then swap the clicked tile with the blank tile
 	public void mouseClicked()
 	{
@@ -78,7 +62,7 @@ public class Board implements Comparable<Board>{
 		{
 			for(int column = 0; column < board[row].length; column++)
 			{
-				if(board[row][column].isHovering() && parent.mouseButton == parent.LEFT && isNeighborBlank(row, column))
+				if(board[row][column].isHovering() && parent.mouseButton == PConstants.LEFT && isNeighborBlank(row, column))
 				{
 					temp = board[row][column].getNumber(); // stores numeric value of the clicked tile
 					board[row][column].setNumber(blankValue);
@@ -110,6 +94,7 @@ public class Board implements Comparable<Board>{
 	public void shuffleBoard()
 	{
 		Random random = new Random();
+		solvable = false;
 		
 		while(!(solvable))
 		{
@@ -128,6 +113,7 @@ public class Board implements Comparable<Board>{
 			isSolvable();
 		}
 		setBlankCoordinates();
+		parent.redraw();
 	}
 	
 	// Sets the boolean "isSolvable" to true if the current shuffled board can be solved
@@ -135,15 +121,17 @@ public class Board implements Comparable<Board>{
 	{
 		int numInversions = findNumberOfInversions();		
 		
-		// If the number of inversions is odd, then the puzzle cannot be solved
-		if(numInversions % 2 == 1)
-		{
-			solvable = false;
-		}
-		// If the number of inversions is even, then the puzzle can be solved
-		else
+		// If the number of inversions is even AND the board size is odd, then the puzzle can be solved
+		// OR if the board size is even AND the blank tile is in an odd row and the number of inversions is even
+		// OR if the board size is even AND the blank tile is in an even row and the number of inversions is odd
+		if((numInversions % 2 == 0 && boardSize % 2 == 1) || ((boardSize % 2 == 0) && ((blankRow % 2 == 1) == (numInversions % 2 == 0))))
 		{
 			solvable = true;
+		}
+		// If the number of inversions is odd, then the puzzle cannot be solved
+		else if(numInversions % 2 == 1)
+		{
+			solvable = false;
 		}
 	}
 	
