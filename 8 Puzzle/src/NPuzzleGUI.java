@@ -24,10 +24,9 @@ public class NPuzzleGUI extends PApplet {
 		size(N_SIZE * 100, N_SIZE * 100);
 		setSolvedState();
 		gameBoard = new Board(this, N_SIZE);
-		gameBoard.shuffleBoard();
+		shuffleBoard();
+		//gameBoard.shuffleBoard();
 		new ButtonGUI(this);
-		//solvePuzzle();
-		//printSolution();
 		noLoop();
 	}
 	
@@ -48,6 +47,11 @@ public class NPuzzleGUI extends PApplet {
 	public void mouseClicked()
 	{
 		gameBoard.mouseClicked();
+	}
+	
+	public void shuffleBoard()
+	{
+		gameBoard.shuffleBoard();
 	}
 	
 	// This function probably needs to be broken down into more pieces. It uses the A* algorithm paired with the manhattan distance to determine the appropriate set of moves 
@@ -93,7 +97,7 @@ public class NPuzzleGUI extends PApplet {
 					}
 				}
 			}
-			//System.out.println("totalMoves = " + totalMoves); // this was used for debugging purposes to see how many iterations it takes to solve a puzzle
+			System.out.println("totalMoves = " + totalMoves); // this was used for debugging purposes to see how many iterations it takes to solve a puzzle
 			temp = boardQueue.poll(); // dequeue the minimum priority board (number of moves + manhattanDistance to solve the puzzle)
 		}
 		

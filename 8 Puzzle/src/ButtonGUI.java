@@ -49,13 +49,14 @@ public class ButtonGUI extends JFrame{
 				System.out.println("Solving puzzle...please wait a moment!");
 				solvePuzzle();
 			}
-			else if(actionCommand.equals("Reset"))
+			else if(actionCommand.equals("Reset")) 
 			{
 				System.out.println("Reset!");
 			}
 			else if(actionCommand.equals("Shuffle"))
 			{
-				System.out.println("Shuffle!");
+				System.out.println("Shuffle the board!");
+				shuffleBoard();
 			}
 		}
 	}
@@ -64,5 +65,10 @@ public class ButtonGUI extends JFrame{
 	{
 		parent.solvePuzzle();
 		parent.printSolution();
+	}
+	
+	public void shuffleBoard()
+	{
+		parent.shuffleBoard();
 	}
 }
