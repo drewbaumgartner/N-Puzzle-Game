@@ -7,11 +7,9 @@ Things that have yet to be implemented (2/27/2017):
 
 Reset Button - The plan for this button is to provide the user a way to "reset" the board to its "solved state".
 
-Shuffle Button - The plan for this button is to provide the user a way to shuffle the board.
+Caveat:
 
-Things that are not working correctly (2/27/2017):
-
-The program currently cannot solve a 4x4 (parity checking is most likely the issue).  I am in the process of fixing this!
+Boards with size 4 or greater (4x4, 5x5, ..., NxN) are now able to be solved but they take an extremely large amount of time and memory to do so. 
 
 
 Resources used:
